@@ -23,15 +23,10 @@ import {
 
 import backgroundImage from '../../assets/woman-notebook.png';
 import api from '../../services/api';
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import * as Yup from "yup";
 
 import { Formik, ErrorMessage } from 'formik';
-
-interface SignInFormData{
-    email: string;
-    password: string;
-} 
 
 const SigninSchema = Yup.object().shape({
     email: Yup.string().email('Digite um e-mail válido;').required('Campo obrigatório.'),
@@ -39,6 +34,7 @@ const SigninSchema = Yup.object().shape({
 });
 
 const Login: React.FC = () => {
+
     return (
         <>
             <SafeAreaView>
@@ -52,10 +48,23 @@ const Login: React.FC = () => {
                                 <Formik
                                     initialValues={{ email: '', password: '' }}
                                     validationSchema={SigninSchema}
-                                    onSubmit={values => console.log(values)}
-                                    // onSubmit={values => 
-                                        
-                                    // }
+                                    onSubmit={async (values) =>
+                                        await api.post('/sessions', values).then(response => {
+                                            const { name } = response.data;
+                                            showMessage({
+                                                message: "Login",
+                                                description: `Olá ${name}, login efetuado com sucesso.`,
+                                                type: "success",
+                                                duration: 6000
+                                            });
+                                        }).catch(error => {
+                                            showMessage({
+                                                message: "Erro",
+                                                description: error.message,
+                                                type: "danger",
+                                            });
+                                        })
+                                    }
                                 >
                                     {({ handleChange, handleBlur, handleSubmit, values }) => (
                                         <>
@@ -84,7 +93,7 @@ const Login: React.FC = () => {
                                             <ErrorText>
                                                 <ErrorMessage name="password" />
                                             </ErrorText>
-                                            
+
                                             <FormButton onPress={handleSubmit}>
                                                 <LinearGradient colors={['#383E71', '#9D25B0']} style={styles.GradientButton}>
                                                     <FormButtonText>ENTRAR</FormButtonText>
