@@ -15,5 +15,6 @@ O desafio proposto foi desenvolver uma aplicação de login para a Wiser Educaç
 `$ yarn install`
 
 ##### - Executar a aplicação;
-Dispositivo Android `$ yarn android` ou `$react-native run-android`
-Dispositivo iOS `$ yarn ios` ou `react-native run-ios`
+>Dispositivo Android `$ yarn android` ou `$react-native run-android`
+
+>Dispositivo iOS `$ yarn ios` ou `react-native run-ios`
